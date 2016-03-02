@@ -6,7 +6,7 @@ Garnet is simple client for [MPD(Music Player Daemon](http://www.musicpd.org/).
 install
 -------
 ``` sh
-	$ go get http://bitbucket.org/macrat/garnet/gr
+	$ go get bitbucket.org/macrat/garnet/gr
 ```
 
 usage
