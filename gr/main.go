@@ -5,9 +5,10 @@ import (
 	"strconv"
 	"strings"
 
-	"bitbucket.org/macrat/go-lsfmt"
 	"golang.org/x/text/unicode/norm"
 	"golang.org/x/text/width"
+
+	"github.com/macrat/go-lsfmt"
 )
 
 func stringWidth(str string) (w int) {
@@ -184,7 +185,7 @@ func main() {
 			if len(t) == 0 {
 				Fprintln(os.Stderr, "no such song")
 			} else {
-				showDelete(t);
+				showDelete(t)
 				handleError(conn.DeleteAll(t))
 			}
 		}},
@@ -192,7 +193,7 @@ func main() {
 			pl, err := conn.Playlist()
 			handleError(err)
 
-			showDelete(pl);
+			showDelete(pl)
 			handleError(conn.Clear())
 		}},
 		{"only", "[POSITION|RANGE|QUERY]", "Delete all songs except mathed song.\nIf not given argument, delete all songs except current song.", func(args []string) {
