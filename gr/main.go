@@ -40,6 +40,13 @@ func main() {
 		Println(st)
 	}
 
+	showDelete := func(l Playlist) {
+		Println("deleted", len(l), "songs:")
+		for _, s := range l {
+			Println("", s.file)
+		}
+	}
+
 	if len(os.Args) <= 1 {
 		showStatus()
 		return
@@ -177,10 +184,7 @@ func main() {
 			if len(t) == 0 {
 				Fprintln(os.Stderr, "no such song")
 			} else {
-				Println("deleted", len(t), "songs:")
-				for _, x := range t {
-					Println("", x.file)
-				}
+				showDelete(t);
 				handleError(conn.DeleteAll(t))
 			}
 		}},
@@ -188,11 +192,7 @@ func main() {
 			pl, err := conn.Playlist()
 			handleError(err)
 
-			Println("deleted", len(pl), "songs:")
-			for _, s := range pl {
-				Println("", s.file)
-			}
-
+			showDelete(pl);
 			handleError(conn.Clear())
 		}},
 		{"only", "[POSITION|RANGE|QUERY]", "Delete all songs except mathed song.\nIf not given argument, delete all songs except current song.", func(args []string) {
@@ -213,10 +213,7 @@ func main() {
 			if len(target) == 0 {
 				Fprintln(os.Stderr, "no such song")
 			} else {
-				Println("deleted", len(target), "songs:")
-				for _, x := range target {
-					Println("", x.file)
-				}
+				showDelete(target)
 				handleError(conn.DeleteAll(target))
 			}
 		}},
