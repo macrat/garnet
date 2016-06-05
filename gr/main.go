@@ -165,7 +165,7 @@ func main() {
 			}
 		}},
 		{"delete", "POSITION|RANGE|QUERY", "Delete songs from playlist.", func(args []string) {
-			if len(args) != 1 {
+			if len(args) == 0 {
 				Fprintln(os.Stderr, "please designation deleting song.")
 				os.Exit(1)
 			}
