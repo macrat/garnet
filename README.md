@@ -1,7 +1,7 @@
 Garnet
 ======
 
-Garnet is simple client for [MPD(Music Player Daemon](http://www.musicpd.org/).
+Garnet is simple client for [MPD(Music Player Daemon)](http://www.musicpd.org/).
 
 install
 -------
