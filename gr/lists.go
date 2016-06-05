@@ -2,6 +2,7 @@ package main
 
 import (
 	"strings"
+	"strconv"
 
 	"golang.org/x/text/width"
 )
@@ -60,4 +61,26 @@ func (this Playlist) Filter(query string) Playlist {
 		}
 	}
 	return result
+}
+
+func (this Playlist) RangeFilter(query string) Playlist {
+	if pos, err := strconv.Atoi(query); err == nil && 0 <= pos && pos < len(this) {
+		return Playlist{this[pos]}
+	}
+
+	if xs := strings.Split(query, "-"); len(xs) == 2 {
+		f, fe := strconv.Atoi(xs[0])
+		t, te := strconv.Atoi(xs[1])
+
+		if fe != nil && te == nil && xs[0] == "" {
+			f = 0
+		} else if fe == nil && te != nil && xs[1] == "" {
+			t = len(this) - 1
+		}
+		if fe == nil || te == nil {
+			return this[f:t+1]
+		}
+	}
+
+	return this.Filter(query)
 }

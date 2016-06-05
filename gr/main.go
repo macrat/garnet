@@ -173,45 +173,12 @@ func main() {
 			pl, err := conn.Playlist()
 			handleError(err)
 
-			if pos, err := strconv.Atoi(args[0]); err == nil && pos >= 0 {
-				if len(pl) <= pos {
-					Fprintln(os.Stderr, "out of range")
-					os.Exit(1)
-				}
-				handleError(conn.Delete(pos))
-				Println("deleted 1 songs:")
-				Println("", pl[pos].file)
-				return
-			}
-
-			if xs := strings.Split(args[0], "-"); len(xs) == 2 {
-				f, fe := strconv.Atoi(xs[0])
-				t, te := strconv.Atoi(xs[1])
-
-				pl, err := conn.Playlist()
-				handleError(err)
-
-				if fe != nil && te == nil && xs[0] == "" {
-					f = 0
-				} else if fe == nil && te != nil && xs[1] == "" {
-					t = len(pl) - 1
-				}
-				if fe == nil || te == nil {
-					conn.DeleteRange(f, t+1)
-					Printf("deleted %d songs:\n", t-f+1)
-					for _, s := range pl[f : t+1] {
-						Println("", s.file)
-					}
-					return
-				}
-			}
-
-			t := pl.Filter(strings.Join(args, " "))
+			t := pl.RangeFilter(strings.Join(args, " "))
 			if len(t) == 0 {
 				Fprintln(os.Stderr, "no such song")
 			} else {
 				Println("deleted", len(t), "songs:")
-				for ; len(t) > 0; t = pl.Filter(strings.Join(args, " ")) {
+				for ; len(t) > 0; t = pl.RangeFilter(strings.Join(args, " ")) {
 					handleError(conn.Delete(t[0].pos))
 					Println("", t[0].file)
 					pl, err = conn.Playlist()
