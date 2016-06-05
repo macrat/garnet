@@ -1,8 +1,8 @@
 package main
 
 import (
-	"strings"
 	"strconv"
+	"strings"
 
 	"golang.org/x/text/width"
 )
@@ -78,7 +78,7 @@ func (this Playlist) RangeFilter(query string) Playlist {
 			t = len(this) - 1
 		}
 		if fe == nil || te == nil {
-			return this[f:t+1]
+			return this[f : t+1]
 		}
 	}
 
