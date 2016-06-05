@@ -187,6 +187,28 @@ func main() {
 			}
 		}},
 		{"clear", "", "Delete all songs in the playlist.", func(args []string) { handleError(conn.Clear()); showStatus() }},
+		{"only", "POSITION|RANGE|QUERY", "Delete all songs except mathed song.", func(args []string) {
+			if len(args) != 1 {
+				Fprintln(os.Stderr, "please designation deleting song.")
+				os.Exit(1)
+			}
+
+			pl, err := conn.Playlist()
+			handleError(err)
+
+			t := pl.Sub(pl.RangeFilter(strings.Join(args, " ")))
+			if len(t) == 0 {
+				Fprintln(os.Stderr, "no such song")
+			} else {
+				Println("deleted", len(t), "songs:")
+				for ; len(t) > 0; t = pl.Sub(pl.Filter(strings.Join(args, " "))) {
+					handleError(conn.Delete(t[0].pos))
+					Println("", t[0].file)
+					pl, err = conn.Playlist()
+					handleError(err)
+				}
+			}
+		}},
 		{"move", "FROM TO", "Moving song in the playlist.", func(args []string) {
 			if len(args) != 2 {
 				Fprintln(os.Stderr, "please give `from` position and `to` position.")

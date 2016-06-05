@@ -84,3 +84,24 @@ func (this Playlist) RangeFilter(query string) Playlist {
 
 	return this.Filter(query)
 }
+
+func (this Playlist) Has(s Song) bool {
+	for _, x := range this {
+		if x.file == s.file {
+			return true
+		}
+	}
+	return false
+}
+
+func (this Playlist) Sub(pl Playlist) Playlist {
+	var result Playlist
+
+	for _, s := range this {
+		if !pl.Has(*s) {
+			result = append(result, s)
+		}
+	}
+
+	return result
+}
