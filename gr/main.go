@@ -185,7 +185,7 @@ func main() {
 			}
 		}},
 		{"clear", "", "Delete all songs in the playlist.", func(args []string) { handleError(conn.Clear()); showStatus() }},
-		{"only", "[POSITION|RANGE|QUERY]", "Delete all songs except mathed song. If not given argument, delete all songs except current song.", func(args []string) {
+		{"only", "[POSITION|RANGE|QUERY]", "Delete all songs except mathed song.\nIf not given argument, delete all songs except current song.", func(args []string) {
 			var target Playlist
 
 			pl, err := conn.Playlist()
