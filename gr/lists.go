@@ -105,3 +105,15 @@ func (this Playlist) Sub(pl Playlist) Playlist {
 
 	return result
 }
+
+func (this Playlist) Len() int {
+	return len(this)
+}
+
+func (this Playlist) Less(i, j int) bool {
+	return this[i].pos < this[j].pos
+}
+
+func (this Playlist) Swap(i, j int) {
+	this[i], this[j] = this[j], this[i]
+}

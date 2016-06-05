@@ -178,12 +178,10 @@ func main() {
 				Fprintln(os.Stderr, "no such song")
 			} else {
 				Println("deleted", len(t), "songs:")
-				for ; len(t) > 0; t = pl.RangeFilter(strings.Join(args, " ")) {
-					handleError(conn.Delete(t[0].pos))
-					Println("", t[0].file)
-					pl, err = conn.Playlist()
-					handleError(err)
+				for _, x := range t {
+					Println("", x.file)
 				}
+				handleError(conn.DeleteAll(t))
 			}
 		}},
 		{"clear", "", "Delete all songs in the playlist.", func(args []string) { handleError(conn.Clear()); showStatus() }},
@@ -201,12 +199,10 @@ func main() {
 				Fprintln(os.Stderr, "no such song")
 			} else {
 				Println("deleted", len(t), "songs:")
-				for ; len(t) > 0; t = pl.Sub(pl.Filter(strings.Join(args, " "))) {
-					handleError(conn.Delete(t[0].pos))
-					Println("", t[0].file)
-					pl, err = conn.Playlist()
-					handleError(err)
+				for _, x := range t {
+					Println("", x.file)
 				}
+				handleError(conn.DeleteAll(t))
 			}
 		}},
 		{"move", "FROM TO", "Moving song in the playlist.", func(args []string) {

@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 
@@ -85,6 +86,18 @@ func (this *Connection) Delete(pos int) error {
 
 func (this *Connection) DeleteRange(from int, to int) error {
 	return this.conn.Delete(from, to)
+}
+
+func (this *Connection) DeleteAll(list Playlist) error {
+	sort.Sort(list)
+
+	for i, x := range list {
+		if err := this.Delete(x.pos - i); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 func (this *Connection) GetFiles() (PathList, error) {
