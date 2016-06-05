@@ -87,7 +87,7 @@ func (this Playlist) RangeFilter(query string) Playlist {
 
 func (this Playlist) Has(s Song) bool {
 	for _, x := range this {
-		if x.file == s.file {
+		if x.file == s.file && x.pos == s.pos {
 			return true
 		}
 	}

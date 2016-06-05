@@ -185,24 +185,29 @@ func main() {
 			}
 		}},
 		{"clear", "", "Delete all songs in the playlist.", func(args []string) { handleError(conn.Clear()); showStatus() }},
-		{"only", "POSITION|RANGE|QUERY", "Delete all songs except mathed song.", func(args []string) {
-			if len(args) != 1 {
-				Fprintln(os.Stderr, "please designation deleting song.")
-				os.Exit(1)
-			}
+		{"only", "[POSITION|RANGE|QUERY]", "Delete all songs except mathed song. If not given argument, delete all songs except current song.", func(args []string) {
+			var target Playlist
 
 			pl, err := conn.Playlist()
 			handleError(err)
 
-			t := pl.Sub(pl.RangeFilter(strings.Join(args, " ")))
-			if len(t) == 0 {
+			if len(args) > 0 {
+				target = pl.Sub(pl.RangeFilter(strings.Join(args, " ")))
+			} else {
+				cur, err := conn.CurrentSong()
+				handleError(err)
+
+				target = pl.Sub([]*Song{cur})
+			}
+
+			if len(target) == 0 {
 				Fprintln(os.Stderr, "no such song")
 			} else {
-				Println("deleted", len(t), "songs:")
-				for _, x := range t {
+				Println("deleted", len(target), "songs:")
+				for _, x := range target {
 					Println("", x.file)
 				}
-				handleError(conn.DeleteAll(t))
+				handleError(conn.DeleteAll(target))
 			}
 		}},
 		{"move", "FROM TO", "Moving song in the playlist.", func(args []string) {
