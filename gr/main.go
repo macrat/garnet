@@ -184,7 +184,17 @@ func main() {
 				handleError(conn.DeleteAll(t))
 			}
 		}},
-		{"clear", "", "Delete all songs in the playlist.", func(args []string) { handleError(conn.Clear()); showStatus() }},
+		{"clear", "", "Delete all songs in the playlist.", func(args []string) {
+			pl, err := conn.Playlist()
+			handleError(err)
+
+			Println("deleted", len(pl), "songs:")
+			for _, s := range pl {
+				Println("", s.file)
+			}
+
+			handleError(conn.Clear())
+		}},
 		{"only", "[POSITION|RANGE|QUERY]", "Delete all songs except mathed song.\nIf not given argument, delete all songs except current song.", func(args []string) {
 			var target Playlist
 
