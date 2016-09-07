@@ -19,7 +19,7 @@ func NewSong(info map[string]string, current bool) (song *Song, err error) {
 	}
 	t, err := strconv.Atoi(info["Time"])
 	if err != nil {
-		return nil, fmt.Errorf("parse failed song duration: \"%s\"", info["Time"])
+		t = -1
 	}
 	return &Song{
 		file:    (Path)(info["file"]),

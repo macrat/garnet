@@ -84,7 +84,7 @@ func (this *Status) ColoredString() (r string) {
 
 	b2c := map[bool]string{true: "\033[1m", false: "\033[37m"}
 	rate := 0
-	if this.elapsed > 0 {
+	if this.elapsed > 0 && time > 0 {
 		rate = (int)(this.elapsed / time * 100)
 	}
 	r += fmt.Sprintf("% 6s /% 6s [% 3d%%]%s\n%srepeat\033[0m\t%srandom\033[0m\t%ssingle\033[0m\t%sconsume\033[0m",

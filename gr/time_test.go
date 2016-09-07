@@ -15,6 +15,8 @@ func TestTimeToString(t *testing.T) {
 		{t: 60, e: "1:00"},
 		{t: 61, e: "1:01"},
 		{t: 120, e: "2:00"},
+		{t: -1, e: "unknown"},
+		{t: -0.01, e: "unknown"},
 	} {
 		if x.t.String() != x.e {
 			t.Errorf("Time %f excepted \"%s\" but got \"%s\"", (float64)(x.t), x.e, x.t.String())
