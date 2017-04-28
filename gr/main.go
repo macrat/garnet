@@ -218,6 +218,26 @@ func main() {
 				handleError(conn.DeleteAll(target))
 			}
 		}},
+		{"deduplicate", "", "Delete duplicated songs from playlist.", func(args []string) {
+			pl, err := conn.Playlist()
+			handleError(err)
+
+			if len(pl) > 1 {
+				var target Playlist
+
+				for i, a := range pl[1:] {
+					for _, b := range pl[:i+1] {
+						if a.file == b.file {
+							target = append(target, a)
+							break
+						}
+					}
+				}
+
+				showDelete(target)
+				handleError(conn.DeleteAll(target))
+			}
+		}},
 		{"move", "FROM TO", "Moving song in the playlist.", func(args []string) {
 			if len(args) != 2 {
 				Fprintln(os.Stderr, "please give `from` position and `to` position.")
