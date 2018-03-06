@@ -117,3 +117,19 @@ func (this Playlist) Less(i, j int) bool {
 func (this Playlist) Swap(i, j int) {
 	this[i], this[j] = this[j], this[i]
 }
+
+func (this Playlist) String() string {
+	r := make([]string, len(this))
+	for i, song := range this {
+		r[i] = song.String()
+	}
+	return strings.Join(r, "\n") + "\n"
+}
+
+func (this Playlist) ColoredString() string {
+	r := make([]string, len(this))
+	for i, song := range this {
+		r[i] = song.ColoredString()
+	}
+	return strings.Join(r, "\n") + "\n"
+}

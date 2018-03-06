@@ -31,14 +31,7 @@ func NewStatus(status map[string]string, elapsed Time, playlist Playlist) *Statu
 	}
 }
 
-func (this *Status) String() (r string) {
-	for _, song := range this.playlist {
-		r += fmt.Sprintln(song.String())
-	}
-	if len(this.playlist) > 0 {
-		r += "\n"
-	}
-
+func (this *Status) PlaybackString() string {
 	flag := func(key string, state bool) string {
 		if state {
 			return "[" + key + "]"
@@ -56,7 +49,7 @@ func (this *Status) String() (r string) {
 	if this.elapsed > 0 {
 		rate = (int)(this.elapsed / time * 100)
 	}
-	r += fmt.Sprintf("% 6s /% 6s [% 3d%%]%s\n%s\t%s\t%s\t%s",
+	return fmt.Sprintf("% 6s /% 6s [% 3d%%]%s\n%s\t%s\t%s\t%s",
 		this.elapsed,
 		time,
 		rate,
@@ -66,17 +59,9 @@ func (this *Status) String() (r string) {
 		flag("single", this.single),
 		flag("consume", this.consume),
 	)
-	return
 }
 
-func (this *Status) ColoredString() (r string) {
-	for _, song := range this.playlist {
-		r += fmt.Sprintln(song.ColoredString())
-	}
-	if len(this.playlist) > 0 {
-		r += "\n"
-	}
-
+func (this *Status) PlaybackColoredString() string {
 	var time Time
 	if this.current != nil {
 		time = this.current.time
@@ -87,7 +72,7 @@ func (this *Status) ColoredString() (r string) {
 	if this.elapsed > 0 && time > 0 {
 		rate = (int)(this.elapsed / time * 100)
 	}
-	r += fmt.Sprintf("% 6s /% 6s [% 3d%%]%s\n%srepeat\033[0m\t%srandom\033[0m\t%ssingle\033[0m\t%sconsume\033[0m",
+	return fmt.Sprintf("% 6s /% 6s [% 3d%%]%s\n%srepeat\033[0m\t%srandom\033[0m\t%ssingle\033[0m\t%sconsume\033[0m",
 		this.elapsed,
 		time,
 		rate,
@@ -97,5 +82,97 @@ func (this *Status) ColoredString() (r string) {
 		b2c[this.single],
 		b2c[this.consume],
 	)
+}
+
+func (this *Status) String() string {
+	r := this.playlist.String()
+
+	if len(r) > 0 {
+		r += "\n"
+	}
+
+	r += this.PlaybackString()
+
+	return r
+}
+
+func (this *Status) ColoredString() string {
+	r := this.playlist.ColoredString()
+
+	if len(r) > 0 {
+		r += "\n"
+	}
+
+	r += this.PlaybackColoredString()
+
+	return r
+}
+
+type StatusSummary struct {
+	Status
+}
+
+func (this *Status) Summary() *StatusSummary {
+	return &StatusSummary{Status: *this}
+}
+
+func (this *StatusSummary) summarize() (left, right int) {
+	if this.current == nil {
+		left = 0
+		right = len(this.playlist)
+		if right > 10 {
+			right = 10
+		}
+		return
+	}
+
+	left = 0
+	if this.current.pos > 10 {
+		left = this.current.pos - 10
+	}
+
+	right = len(this.playlist)
+	if this.current.pos+11 < right {
+		right = this.current.pos + 11
+	}
+
 	return
+}
+
+func (this *StatusSummary) String() string {
+	left, right := this.summarize()
+
+	r := this.playlist[left:right].String()
+
+	if right <= len(this.playlist)-1 {
+		r += " ...\n"
+		r += this.playlist[len(this.playlist)-1].String() + "\n"
+	}
+
+	if len(r) > 0 {
+		r += "\n"
+	}
+
+	r += this.PlaybackString()
+
+	return r
+}
+
+func (this *StatusSummary) ColoredString() string {
+	left, right := this.summarize()
+
+	r := this.playlist[left:right].ColoredString()
+
+	if right <= len(this.playlist)-1 {
+		r += " \033[37m...\033[0m\n"
+		r += this.playlist[len(this.playlist)-1].ColoredString() + "\n"
+	}
+
+	if len(r) > 0 {
+		r += "\n"
+	}
+
+	r += this.PlaybackString()
+
+	return r
 }

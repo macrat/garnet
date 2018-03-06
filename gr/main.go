@@ -38,7 +38,7 @@ func main() {
 	showStatus := func() {
 		st, err := conn.Status()
 		handleError(err)
-		Println(st)
+		Println(st.Summary())
 	}
 
 	showDelete := func(l Playlist) {
@@ -274,6 +274,11 @@ func main() {
 		{"random", "", "Toggle random mode.", func(args []string) { handleError(conn.Random()); showStatus() }},
 		{"single", "", "Toggle single mode.", func(args []string) { handleError(conn.Single()); showStatus() }},
 		{"consume", "", "Toggle consume mode.", func(args []string) { handleError(conn.Consume()); showStatus() }},
+		{"detail", "", "Show all songs in the playlist.", func(args []string) {
+			st, err := conn.Status()
+			handleError(err)
+			Println(st)
+		}},
 		{"update", "", "Update database.", func(args []string) {
 			id, err := conn.Update()
 			handleError(err)
