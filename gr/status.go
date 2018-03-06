@@ -172,7 +172,7 @@ func (this *StatusSummary) ColoredString() string {
 		r += "\n"
 	}
 
-	r += this.PlaybackString()
+	r += this.PlaybackColoredString()
 
 	return r
 }
