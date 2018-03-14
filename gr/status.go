@@ -132,8 +132,8 @@ func (this *StatusSummary) summarize() (left, right int) {
 	}
 
 	right = len(this.playlist)
-	if this.current.pos+11 < right {
-		right = this.current.pos + 11
+	if left + 21 < right {
+		right = left + 21
 	}
 
 	return
