@@ -87,7 +87,7 @@ func (this *Status) PlaybackColoredString() string {
 func (this *Status) String() string {
 	r := this.playlist.String()
 
-	if len(r) > 0 {
+	if len(r) > 1 {
 		r += "\n"
 	}
 
@@ -99,7 +99,7 @@ func (this *Status) String() string {
 func (this *Status) ColoredString() string {
 	r := this.playlist.ColoredString()
 
-	if len(r) > 0 {
+	if len(r) > 1 {
 		r += "\n"
 	}
 
@@ -149,7 +149,7 @@ func (this *StatusSummary) String() string {
 		r += this.playlist[len(this.playlist)-1].String() + "\n"
 	}
 
-	if len(r) > 0 {
+	if len(r) > 1 {
 		r += "\n"
 	}
 
@@ -168,7 +168,7 @@ func (this *StatusSummary) ColoredString() string {
 		r += this.playlist[len(this.playlist)-1].ColoredString() + "\n"
 	}
 
-	if len(r) > 0 {
+	if len(r) > 1 {
 		r += "\n"
 	}
 
